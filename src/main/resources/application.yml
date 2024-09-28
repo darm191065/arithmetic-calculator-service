@@ -15,3 +15,6 @@ spring:
   sql:
     init:
       mode: always
+jwt:
+  key: '2a212126e981a493605cb80aa89c0e4c493589786ce8b0985baa1c6973c3c91d'
+  access-token-expiration: 3600000

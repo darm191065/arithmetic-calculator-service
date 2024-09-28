@@ -1,6 +1,5 @@
 package com.drm.arithmeticcalculator.auth.mapper;
 
-import com.drm.arithmeticcalculator.auth.entity.RolePO;
 import com.drm.arithmeticcalculator.auth.entity.UserPO;
 import com.drm.arithmeticcalculator.auth.model.AuthenticatedUser;
 import com.drm.arithmeticcalculator.auth.model.AuthenticatedUserRole;
@@ -12,8 +11,8 @@ public interface UserMapper {
 
     AuthenticatedUser fromEntityToModel(UserPO user);
 
-    @Mapping(target = "role", source = "role.name")
-    AuthenticatedUserRole fromEntityToModel(RolePO role);
+//    @Mapping(target = "role", source = "role.name")
+//    AuthenticatedUserRole fromEntityToModel(RolePO role);
 
 
 }

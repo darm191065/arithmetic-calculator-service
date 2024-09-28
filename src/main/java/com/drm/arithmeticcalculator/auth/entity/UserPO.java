@@ -1,25 +1,20 @@
 package com.drm.arithmeticcalculator.auth.entity;
 
 
+import com.drm.arithmeticcalculator.auth.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,25 +22,35 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS", catalog = "AUTHORIZATION")
-public class UserPO implements Serializable {
+public class UserPO implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+
     private Long id;
-    @Column
-    private String name;
-    @Column
+
     private String username;
+
+    private String name;
+//    @Column
+//    private String username;
+//    @Column
+//    private String email;
     @Column
-    private String email;
-    @Column
-    @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USERS_ROLES",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = { @JoinColumn(name = "role_id")})
-    private Set<RolePO> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorityList = new java.util.ArrayList<>(role.getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                .toList());
+
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.role));
+
+        return authorityList;
+    }
+
 }

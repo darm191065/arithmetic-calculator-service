@@ -1,12 +1,14 @@
 package com.drm.arithmeticcalculator.auth.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticatedUser {
@@ -16,5 +18,5 @@ public class AuthenticatedUser {
     private String username;
     private String email;
     private String password;
-    private Set<AuthenticatedUserRole> roles;
+    private AuthenticatedUserRole role;
 }
